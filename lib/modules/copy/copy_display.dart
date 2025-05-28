@@ -78,7 +78,7 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
   }
 
   Widget _buildFileGridView() {
-    return Expanded(
+    return SizedBox.expand(
       child: FileGridWidget(fileManager: _fileManager),
     );
   }

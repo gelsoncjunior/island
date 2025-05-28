@@ -6,12 +6,9 @@ import 'package:camera_macos/camera_macos.dart';
 class CameraDisplay extends StatefulWidget {
   final double radius;
 
-  final VoidCallback onTap;
-
   const CameraDisplay({
     super.key,
     this.radius = 40,
-    required this.onTap,
   });
 
   @override
@@ -135,10 +132,7 @@ class _CameraDisplayState extends State<CameraDisplay> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        widget.onTap();
-        _toggleCamera();
-      },
+      onTap: _toggleCamera,
       child: _isCameraActive && !_hasError
           ? ClipOval(
               child: SizedBox(

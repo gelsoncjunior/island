@@ -36,11 +36,7 @@ class HomeDisplayContent extends StatelessWidget {
       children: [
         const ModernCalendarWidget(),
         const SizedBox(width: 16),
-        CameraDisplay(
-          onTap: () {
-            onCameraTap();
-          },
-        ),
+        CameraDisplay(),
       ],
     );
   }
@@ -55,7 +51,7 @@ class ModernCalendarWidget extends StatelessWidget {
 
     return Container(
       width: 140,
-      height: 120,
+      height: 140,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -74,19 +70,17 @@ class ModernCalendarWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                _CalendarHeader(month: _getMonthName(now.month)),
-                const SizedBox(height: 6),
-                Expanded(child: _MiniCalendarGrid(currentDate: now)),
-              ],
-            ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _CalendarHeader(month: _getMonthName(now.month)),
+              const SizedBox(height: 8),
+              Expanded(child: _MiniCalendarGrid(currentDate: now)),
+            ],
           ),
         ),
       ),
@@ -119,34 +113,38 @@ class _MiniCalendarGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Cabeçalho dos dias da semana
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
-              .map(
-                (day) => SizedBox(
-                  width: 16,
-                  child: Text(
-                    day,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w600,
+    return OverflowBox(
+      maxHeight: 100,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Cabeçalho dos dias da semana
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+                .map(
+                  (day) => SizedBox(
+                    width: 16,
+                    child: Text(
+                      day,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: 6),
-        // Dias da semana atual
-        Expanded(
-          child: _buildWeekDays(),
-        ),
-      ],
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 8),
+          // Dias da semana atual
+          Flexible(
+            child: _buildWeekDays(),
+          ),
+        ],
+      ),
     );
   }
 
