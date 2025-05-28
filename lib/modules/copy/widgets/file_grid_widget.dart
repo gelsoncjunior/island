@@ -62,34 +62,37 @@ class _FileGridWidgetState extends State<FileGridWidget> {
           children: [
             // Grid de arquivos
             Expanded(
-              child: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  dragDevices: {
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse,
-                  },
-                  scrollbars: true,
-                ),
-                child: Scrollbar(
-                  controller: _scrollController,
-                  thumbVisibility: files.length > 4,
-                  child: SingleChildScrollView(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(
+                    dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    },
+                    scrollbars: true,
+                  ),
+                  child: Scrollbar(
                     controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Row(
-                      children: [
-                        ...files.map((file) => Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: _FileCardWidget(
-                                file: file,
-                                onDelete: () =>
-                                    widget.fileManager.removeFile(file),
-                              ),
-                            )),
-                      ],
+                    thumbVisibility: files.length > 4,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
+                      child: Row(
+                        children: [
+                          ...files.map((file) => Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: _FileCardWidget(
+                                  file: file,
+                                  onDelete: () =>
+                                      widget.fileManager.removeFile(file),
+                                ),
+                              )),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -225,93 +228,96 @@ class _FileCardWidgetState extends State<_FileCardWidget> {
   }
 
   Widget _buildCardContent({required bool isPressed}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 150),
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-        color: isPressed ? Colors.blue[800] : Colors.grey[900],
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: isPressed ? Colors.blue : Colors.grey[700]!,
-          width: isPressed ? 2.0 : 0.5,
-        ),
-        boxShadow: isPressed
-            ? [
-                BoxShadow(
-                  color: Colors.blue.withValues(alpha: 0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : null,
-      ),
-      child: Stack(
-        children: [
-          // Conteúdo principal do card
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _FileIconWidget(extension: widget.file.extension),
-                const SizedBox(height: 4),
-                Text(
-                  widget.file.name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 8,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          color: isPressed ? Colors.blue[800] : Colors.grey[900],
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isPressed ? Colors.blue : Colors.grey[700]!,
+            width: isPressed ? 2.0 : 0.5,
           ),
-          // Botão de deletar no canto superior direito
-          if (!isPressed)
-            Positioned(
-              top: 2,
-              right: 2,
-              child: GestureDetector(
-                onTap: widget.onDelete,
+          boxShadow: isPressed
+              ? [
+                  BoxShadow(
+                    color: Colors.blue.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
+        ),
+        child: Stack(
+          children: [
+            // Conteúdo principal do card
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _FileIconWidget(extension: widget.file.extension),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.file.name,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            // Botão de deletar no canto superior direito
+            if (!isPressed)
+              Positioned(
+                top: 2,
+                right: 2,
+                child: GestureDetector(
+                  onTap: widget.onDelete,
+                  child: Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.red.withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 10,
+                    ),
+                  ),
+                ),
+              ),
+            // Ícone de cópia quando está sendo pressionado
+            if (isPressed)
+              Positioned(
+                top: 2,
+                right: 2,
                 child: Container(
                   width: 16,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.8),
+                    color: Colors.blue.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
-                    Icons.close,
+                    Icons.file_copy,
                     color: Colors.white,
                     size: 10,
                   ),
                 ),
               ),
-            ),
-          // Ícone de cópia quando está sendo pressionado
-          if (isPressed)
-            Positioned(
-              top: 2,
-              right: 2,
-              child: Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.9),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.file_copy,
-                  color: Colors.white,
-                  size: 10,
-                ),
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -44,6 +44,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WindowListener {
   bool _isHovered = false;
   bool _isPinned = false;
+  bool _showContent = false;
   String _currentDisplay = 'HomeDisplayContent';
 
   @override
@@ -75,6 +76,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
                   onCameraTap: () {
                     setState(() {
                       _isPinned = true;
+                      _showContent = true;
                     });
                   },
                   onTap: () {
@@ -91,6 +93,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
                     setState(() {
                       _isPinned = true;
                       _currentDisplay = 'CopyDisplayContent';
+                      _showContent = true;
                     });
                   },
                 ),
@@ -142,8 +145,9 @@ class _MyAppState extends State<MyApp> with WindowListener {
       onExit: (event) {
         setState(() {
           if (!_isPinned) {
+            _showContent = false;
             _isHovered = false;
-            Future.delayed(Duration(milliseconds: 200), () {
+            Future.delayed(Duration(milliseconds: 100), () {
               windowManager.setSize(Size(200, 48));
             });
           }
@@ -154,69 +158,87 @@ class _MyAppState extends State<MyApp> with WindowListener {
           if (event.localPosition.dy < 50) {
             _isHovered = true;
             windowManager.setSize(Size(600, 150));
+            Future.delayed(Duration(milliseconds: 200), () {
+              if (_isHovered && mounted) {
+                setState(() {
+                  _showContent = true;
+                });
+              }
+            });
           }
         });
       },
       child: Align(
         alignment: Alignment.topCenter,
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          alignment: Alignment.center,
-          width: _isHovered ? 600 : 200,
-          height: _isHovered ? 150 : 48,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(_isHovered ? 32 : 16),
-              bottomRight: Radius.circular(_isHovered ? 32 : 16),
-            ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(_isHovered ? 32 : 16),
+            bottomRight: Radius.circular(_isHovered ? 32 : 16),
           ),
-          child: Visibility(
-            visible: _isHovered,
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            alignment: Alignment.center,
+            width: _isHovered ? 600 : 200,
+            height: _isHovered ? 150 : 48,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(_isHovered ? 32 : 16),
+                bottomRight: Radius.circular(_isHovered ? 32 : 16),
+              ),
+            ),
+            child: AnimatedOpacity(
+              duration: Duration(milliseconds: 200),
+              opacity: _showContent ? 1.0 : 0.0,
+              child: Visibility(
+                visible: _isHovered,
+                maintainSize: false,
+                child: Center(
+                  child: Column(
                     children: [
-                      Flexible(
-                        child: Container(
-                          width: 150,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Container(
+                              width: 150,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                              ),
+                              child: left,
+                            ),
                           ),
-                          child: left,
-                        ),
+                          Flexible(
+                            child: Container(
+                              width: 150,
+                              height: 48,
+                              color: Colors.black,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: right,
+                            ),
+                          ),
+                        ],
                       ),
                       Flexible(
                         child: Container(
-                          width: 150,
-                          height: 48,
-                          color: Colors.black,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: right,
+                          height: 100,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(32),
+                              bottomRight: Radius.circular(32),
+                            ),
+                          ),
+                          child: center,
                         ),
                       ),
                     ],
                   ),
-                  Flexible(
-                    child: Container(
-                      height: 100,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(32),
-                          bottomRight: Radius.circular(32),
-                        ),
-                      ),
-                      child: center,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

@@ -59,26 +59,33 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
         final hasFiles = files.isNotEmpty;
 
         // Envolver toda a área com DropTarget para permitir drag contínuo
-        return DropTarget(
-          onDragDone: _onDragDone,
-          onDragEntered: _onDragEntered,
-          onDragExited: _onDragExited,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border:
-                  _isDragging ? Border.all(color: Colors.grey, width: 2) : null,
-            ),
-            child: hasFiles
-                ? Column(
-                    children: [
-                      Expanded(
-                        child: FileGridWidget(fileManager: _fileManager),
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: DropTarget(
+            onDragDone: _onDragDone,
+            onDragEntered: _onDragEntered,
+            onDragExited: _onDragExited,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: _isDragging
+                    ? Border.all(color: Colors.grey, width: 2)
+                    : null,
+              ),
+              child: hasFiles
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: FileGridWidget(fileManager: _fileManager),
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-                : _buildEmptyDropArea(),
+                    )
+                  : _buildEmptyDropArea(),
+            ),
           ),
         );
       },
@@ -86,16 +93,19 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
   }
 
   Widget _buildEmptyDropArea() {
-    return DashedBorderContainer(
-      borderColor: _isDragging ? Colors.grey : Colors.grey,
-      strokeWidth: _isDragging ? 2.0 : 1.0,
-      dashLength: 6.0,
-      gapLength: 4.0,
+    return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: _buildDropAreaContent(),
+      child: DashedBorderContainer(
+        borderColor: _isDragging ? Colors.grey : Colors.grey,
+        strokeWidth: _isDragging ? 2.0 : 1.0,
+        dashLength: 6.0,
+        gapLength: 4.0,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          child: Center(
+            child: _buildDropAreaContent(),
+          ),
         ),
       ),
     );
@@ -131,11 +141,17 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
           color: Colors.white54,
           size: 32,
         ),
-        Text(
-          'Arraste arquivos aqui e clique em um arquivo para copiá-lo',
-          style: TextStyle(
-            color: Colors.white54,
-            fontSize: 14,
+        const SizedBox(height: 8),
+        Flexible(
+          child: Text(
+            'Arraste arquivos aqui e clique em um arquivo para copiá-lo',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
