@@ -70,16 +70,18 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
               border:
                   _isDragging ? Border.all(color: Colors.grey, width: 2) : null,
             ),
-            child: hasFiles ? _buildFileGridView() : _buildEmptyDropArea(),
+            child: hasFiles
+                ? Column(
+                    children: [
+                      Expanded(
+                        child: FileGridWidget(fileManager: _fileManager),
+                      ),
+                    ],
+                  )
+                : _buildEmptyDropArea(),
           ),
         );
       },
-    );
-  }
-
-  Widget _buildFileGridView() {
-    return SizedBox.expand(
-      child: FileGridWidget(fileManager: _fileManager),
     );
   }
 
