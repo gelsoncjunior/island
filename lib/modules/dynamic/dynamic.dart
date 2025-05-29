@@ -179,23 +179,28 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       alignment: Alignment.center,
       width: _isHovered ? widthMax : widthMin,
       height: _isHovered ? heightMax : heightMin,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          left ?? Container(),
-          Container(
-            width: 100,
-            color: Colors.black,
-          ),
-          right ?? Container(),
-        ],
+      child: AnimatedOpacity(
+        opacity: _isHovered ? 0 : 1,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            left ?? Container(),
+            Container(
+              width: 100,
+              color: Colors.black,
+            ),
+            right ?? Container(),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildExpanded({Widget? left, Widget? center, Widget? right}) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       color: Colors.black,
       alignment: Alignment.center,
@@ -206,21 +211,26 @@ class _DynamicState extends State<Dynamic> with WindowListener {
           _showContent = true;
         });
       },
-      child: _showContent
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    left ?? Container(),
-                    right ?? Container(),
-                  ],
-                ),
-                center ?? Container(),
-              ],
-            )
-          : SizedBox.shrink(),
+      child: AnimatedOpacity(
+        opacity: _isHovered ? 1 : 0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        child: _showContent
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      left ?? Container(),
+                      right ?? Container(),
+                    ],
+                  ),
+                  center ?? Container(),
+                ],
+              )
+            : SizedBox.shrink(),
+      ),
     );
   }
 }
