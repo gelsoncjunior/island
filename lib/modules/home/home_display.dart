@@ -5,13 +5,7 @@ import '../playing/playing_display.dart';
 
 class HomeDisplay extends StatelessWidget {
   final VoidCallback onTap;
-  final VoidCallback onCameraTap;
-
-  const HomeDisplay({
-    super.key,
-    required this.onTap,
-    required this.onCameraTap,
-  });
+  const HomeDisplay({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
+
+import '../cmd/cmd.dart';
 
 class PlayingDisplay extends StatefulWidget {
   const PlayingDisplay({super.key});
@@ -17,19 +17,9 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
   String _currentAlbum = '';
   String _currentPlayerState = 'stopped';
   Timer? _timer;
-  Future<String> _command(String command) async {
-    final result = await Isolate.run(() {
-      return Process.runSync(
-        'osascript',
-        ['-e', command],
-        runInShell: true,
-      );
-    });
-    return result.stdout.toString().trim();
-  }
 
   Future<void> _getSpotifyPlayerState() async {
-    final all = await _command(
+    final all = await command(
         'tell application "Spotify" to get player state as string');
     setState(() {
       _currentPlayerState = all;
@@ -38,7 +28,7 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
 
   Future<void> _getSpotifyPlayerInfo() async {
     await _getSpotifyPlayerState();
-    final all = await _command(
+    final all = await command(
         'tell application "Spotify" to get {name, artist, artwork url} of current track');
     final trackName = all.split(',')[0].replaceAll('"', '').trim();
     final trackArtist = all.split(',')[1].replaceAll('"', '').trim();
@@ -51,17 +41,17 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
   }
 
   void _nextTrack() {
-    _command('tell application "Spotify" to next track');
+    command('tell application "Spotify" to next track');
     _getSpotifyPlayerInfo();
   }
 
   void _previousTrack() {
-    _command('tell application "Spotify" to previous track');
+    command('tell application "Spotify" to previous track');
     _getSpotifyPlayerInfo();
   }
 
   void _playPause() {
-    _command('tell application "Spotify" to playpause');
+    command('tell application "Spotify" to playpause');
     _getSpotifyPlayerInfo();
   }
 

@@ -19,6 +19,7 @@ class CopyDisplay extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             Icons.inbox_rounded,
