@@ -62,37 +62,35 @@ class _FileGridWidgetState extends State<FileGridWidget> {
           children: [
             // Grid de arquivos
             Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(
-                    dragDevices: {
-                      PointerDeviceKind.touch,
-                      PointerDeviceKind.mouse,
-                    },
-                    scrollbars: true,
-                  ),
-                  child: Scrollbar(
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
+                  scrollbars: true,
+                ),
+                child: Scrollbar(
+                  controller: _scrollController,
+                  thumbVisibility: files.length > 4,
+                  child: SingleChildScrollView(
                     controller: _scrollController,
-                    thumbVisibility: files.length > 4,
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                      child: Row(
-                        children: [
-                          ...files.map((file) => Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: _FileCardWidget(
-                                  file: file,
-                                  onDelete: () =>
-                                      widget.fileManager.removeFile(file),
-                                ),
-                              )),
-                        ],
-                      ),
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ...files.map((file) => Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: _FileCardWidget(
+                                file: file,
+                                onDelete: () =>
+                                    widget.fileManager.removeFile(file),
+                              ),
+                            )),
+                      ],
                     ),
                   ),
                 ),
@@ -154,10 +152,7 @@ class _FileCardWidgetState extends State<_FileCardWidget> {
       final success = await fileManager.copyFileToClipboard(widget.file);
 
       if (mounted && context.mounted) {
-        if (success) {
-          _showSuccessMessage(
-              context, '✅ ${widget.file.name} copiado! Use CMD+V para colar.');
-        } else {
+        if (!success) {
           _showErrorMessage(context, '❌ Erro ao copiar: ${widget.file.name}');
         }
       }
@@ -166,38 +161,6 @@ class _FileCardWidgetState extends State<_FileCardWidget> {
         _showErrorMessage(context, '❌ Erro ao copiar: ${widget.file.name}');
       }
     }
-  }
-
-  void _showSuccessMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              Icons.file_copy,
-              color: Colors.white,
-              size: 16,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-            Icon(
-              Icons.check_circle,
-              color: Colors.white,
-              size: 16,
-            ),
-          ],
-        ),
-        backgroundColor: Colors.green[700],
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(8),
-      ),
-    );
   }
 
   void _showErrorMessage(BuildContext context, String message) {
@@ -235,21 +198,11 @@ class _FileCardWidgetState extends State<_FileCardWidget> {
         width: 80,
         height: 80,
         decoration: BoxDecoration(
-          color: isPressed ? Colors.blue[800] : Colors.grey[900],
+          color: isPressed ? Colors.green[800] : Colors.grey[900],
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isPressed ? Colors.blue : Colors.grey[700]!,
-            width: isPressed ? 2.0 : 0.5,
+            color: isPressed ? Colors.green : Colors.grey[700]!,
           ),
-          boxShadow: isPressed
-              ? [
-                  BoxShadow(
-                    color: Colors.blue.withValues(alpha: 0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
         ),
         child: Stack(
           children: [
@@ -258,9 +211,9 @@ class _FileCardWidgetState extends State<_FileCardWidget> {
               padding: const EdgeInsets.all(8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _FileIconWidget(extension: widget.file.extension),
-                  const SizedBox(height: 4),
                   Text(
                     widget.file.name,
                     style: TextStyle(

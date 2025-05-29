@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../camera/camera_display.dart';
+import '../playing/playing_display.dart';
 
 class HomeDisplay extends StatelessWidget {
   final VoidCallback onTap;
@@ -26,14 +27,15 @@ class HomeDisplay extends StatelessWidget {
 }
 
 class HomeDisplayContent extends StatelessWidget {
-  final VoidCallback onCameraTap;
-  const HomeDisplayContent({super.key, required this.onCameraTap});
+  const HomeDisplayContent({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        PlayingDisplay(),
+        const SizedBox(width: 16),
         const ModernCalendarWidget(),
         const SizedBox(width: 16),
         CameraDisplay(),

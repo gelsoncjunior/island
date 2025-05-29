@@ -40,6 +40,8 @@ dependencies:
   cross_file: ^0.3.4+2
   super_clipboard: ^0.8.24
   camera_macos: ^0.0.9
+  http: ^1.2.0
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +53,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

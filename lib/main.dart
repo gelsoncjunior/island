@@ -130,9 +130,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
   Widget _buildDisplayContent() {
     switch (_currentDisplay) {
       case 'HomeDisplayContent':
-        return HomeDisplayContent(
-          onCameraTap: () {},
-        );
+        return HomeDisplayContent();
       case 'CopyDisplayContent':
         return CopyDisplayContent();
       default:

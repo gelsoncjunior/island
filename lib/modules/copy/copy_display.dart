@@ -74,14 +74,25 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
                     : null,
               ),
               child: hasFiles
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: FileGridWidget(fileManager: _fileManager),
+                  ? SizedBox(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: DashedBorderContainer(
+                        borderColor: _isDragging ? Colors.grey : Colors.grey,
+                        dashLength: 6.0,
+                        gapLength: 4.0,
+                        borderRadius: BorderRadius.circular(8),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child:
+                                    FileGridWidget(fileManager: _fileManager),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     )
                   : _buildEmptyDropArea(),
@@ -97,7 +108,6 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
       borderRadius: BorderRadius.circular(8),
       child: DashedBorderContainer(
         borderColor: _isDragging ? Colors.grey : Colors.grey,
-        strokeWidth: _isDragging ? 2.0 : 1.0,
         dashLength: 6.0,
         gapLength: 4.0,
         borderRadius: BorderRadius.circular(8),
