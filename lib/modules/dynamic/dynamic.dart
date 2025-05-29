@@ -84,7 +84,13 @@ class _DynamicState extends State<Dynamic> with WindowListener {
             left: Container(
               height: heightMin,
               width: 120,
-              color: Colors.black,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 spacing: 10,
@@ -113,7 +119,13 @@ class _DynamicState extends State<Dynamic> with WindowListener {
             right: Container(
               height: heightMin,
               width: 120,
-              color: Colors.black,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  bottomLeft: Radius.circular(12),
+                ),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 spacing: 10,
@@ -143,11 +155,24 @@ class _DynamicState extends State<Dynamic> with WindowListener {
         : _buildCollapsed(
             left: Container(
               width: 75,
-              color: Colors.black,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 10),
             ),
             right: Container(
               width: 75,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  bottomLeft: Radius.circular(12),
+                ),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
