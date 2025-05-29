@@ -4,6 +4,7 @@ import 'package:window_manager/window_manager.dart';
 
 import '../../constrains.dart';
 import '../home/home_display.dart';
+import '../static_monitor/static_monitor.dart';
 
 class Dynamic extends StatefulWidget {
   const Dynamic({super.key});
@@ -53,15 +54,8 @@ class _DynamicState extends State<Dynamic> with WindowListener {
         onHover: (e) {
           setState(() {
             if (e.localPosition.dy < 50) {
-              setSize(Size(600, 150));
+              setSize(Size(widthMax, heightMax));
               setHovered(true);
-              // Future.delayed(Duration(milliseconds: 300), () {
-              //   if (_isHovered && mounted) {
-              //     // setState(() {
-              //     //   _showContent = true;
-              //     // });
-              //   }
-              // });
             }
           });
         },
@@ -155,6 +149,11 @@ class _DynamicState extends State<Dynamic> with WindowListener {
               width: 75,
               color: Colors.black,
               padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  StaticMonitor(),
+                ],
+              ),
             ),
           );
   }
@@ -176,8 +175,8 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       curve: Curves.easeInOut,
       color: Colors.black,
       alignment: Alignment.center,
-      width: _isHovered ? 600 : widthMin,
-      height: _isHovered ? 150 : heightMin,
+      width: _isHovered ? widthMax : widthMin,
+      height: _isHovered ? heightMax : heightMin,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -198,8 +197,8 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       curve: Curves.easeInOut,
       color: Colors.black,
       alignment: Alignment.center,
-      width: _isHovered ? 600 : widthMin,
-      height: _isHovered ? 150 : heightMin,
+      width: _isHovered ? widthMax : widthMin,
+      height: _isHovered ? heightMax : heightMin,
       onEnd: () {
         setState(() {
           _showContent = true;

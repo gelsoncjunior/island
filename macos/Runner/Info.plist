@@ -46,5 +46,15 @@
 	<string>Este app precisa acessar a câmera para exibir preview de video</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Este app precisa acessar o microfone para gravar áudio</string>
+	<key>NSSystemAdministrationUsageDescription</key>
+	<string>Este app precisa acessar informações do sistema para monitorar CPU e memória.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Este app precisa acessar estatísticas do sistema.</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.14</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+	<true/>
 </dict>
 </plist>

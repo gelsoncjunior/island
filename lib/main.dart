@@ -3,8 +3,6 @@ import 'package:island/modules/dynamic/dynamic.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'constrains.dart';
-import 'modules/copy/copy_display.dart';
-import 'modules/home/home_display.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
