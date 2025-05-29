@@ -68,15 +68,6 @@ class _CameraDisplayState extends State<CameraDisplay> {
     });
   }
 
-  void _onCameraError() {
-    setState(() {
-      _hasError = true;
-      _isLoading = false;
-      _isCameraActive = false;
-      _controller = null;
-    });
-  }
-
   /// Constrói o widget baseado no estado atual da câmera
   Widget _buildIcon() {
     if (_hasError) {
