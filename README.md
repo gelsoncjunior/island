@@ -111,4 +111,5 @@ dependencies:
 - **Dart**: Linguagem de programação
 - **desktop_drop**: Plugin para drag & drop
 - **Princípios SOLID**: Arquitetura limpa e mantível
+
 # island
