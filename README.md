@@ -1,115 +1,218 @@
-# Island - App Flutter com Drag & Drop
+# 🏝️ Island - Dynamic Island para MacBook
 
-Um aplicativo Flutter para macOS que implementa funcionalidade completa de Drag & Drop para gerenciamento de arquivos.
+Uma implementação elegante e funcional do Dynamic Island do iPhone para MacBook, desenvolvida em Flutter com foco em produtividade e experiência do usuário.
 
-## Funcionalidades
+## 📸 Demonstração
 
-### 🎯 Drag & Drop de Arquivos
+### Estado Compacto
 
-- **Arrastar para dentro**: Arraste arquivos do Finder para o app
-- **Cards horizontais**: Visualização em cards lado a lado com scroll
-- **Feedback visual**: Bordas picotadas e animações durante o drag
-- **Suporte contínuo**: Adicione mais arquivos mesmo quando já há arquivos na lista
+![Island - Estado Compacto](assets/readme/compacto.png)
 
-### 📋 Cópia de Arquivos
+### Estado Expandido
 
-- **Toque simples**: Toque no card para copiar o **caminho** do arquivo
-- **Pressionar e segurar**: Mantenha pressionado para copiar o **arquivo real** para área de transferência
-- **Feedback visual**: Card fica verde durante o long press, confirmação via SnackBar
-- **Feedback háptico**: Vibração ao iniciar e completar a cópia
-- **Tooltip informativo**: Instruções de uso ao passar o mouse
+![Island - Estado Expandido](assets/readme/expandido.png)
 
-### 🗂️ Gerenciamento
+## ⭐ O que é o Island?
 
-- **Lista sequencial**: Arquivos organizados por ordem de adição
-- **Exclusão individual**: Botão X em cada card para remover
-- **Limpar tudo**: Opção para remover todos os arquivos
-- **Contador**: Mostra quantos arquivos foram adicionados
+O **Island** é uma aplicação que traz a experiência do Dynamic Island do iPhone para o MacBook, oferecendo uma interface compacta e intuitiva que se adapta dinamicamente às suas necessidades. Ele permanece sempre visível na tela, proporcionando acesso rápido a informações e funcionalidades essenciais.
 
-## Arquitetura
+## 🚀 Funcionalidades
+
+### 1. 📊 Monitor de Sistema
+
+- **Memória RAM**: Exibição em tempo real do uso de memória
+- **CPU**: Monitoramento do processamento atual
+- **Interface visual**: Gráficos e percentuais intuitivos
+
+### 2. 📋 Bandeja de Arquivos (Clipboard Avançado)
+
+- **Drag & Drop**: Arraste arquivos do Finder para armazenar temporariamente
+- **Cópia inteligente**:
+  - Toque simples → copia o caminho do arquivo
+  - Pressionar e segurar → copia o arquivo real
+- **Gestão de arquivos**: Remova itens individualmente ou limpe tudo
+- **Feedback visual**: Animações e confirmações visuais
+
+### 3. 📷 Espelho (Mini Câmera)
+
+- **Câmera integrada**: Visualização da câmera do MacBook
+- **Interface compacta**: Como um pequeno espelho digital
+- **Sempre disponível**: Acesso rápido quando necessário
+
+### 4. 📅 Calendário
+
+- **Data atual**: Exibição da data de hoje
+- **Interface limpa**: Design minimalista e informativo
+- **Atualização automática**: Sempre sincronizado
+
+### 5. 🎵 Player de Música (Spotify)
+
+- **Controles completos**:
+  - ⏮️ Voltar para música anterior
+  - ⏯️ Play/Pause
+  - ⏭️ Avançar para próxima música
+- **Integração nativa**: Funciona diretamente com o Spotify
+- **Interface familiar**: Controles intuitivos e responsivos
+
+## 🏗️ Arquitetura
+
+O projeto foi desenvolvido seguindo os **princípios SOLID** e práticas de **Código Limpo**, garantindo:
 
 ### Princípios SOLID Aplicados
 
 #### Single Responsibility Principle (SRP)
 
-- `DroppedFile`: Responsável apenas por representar dados do arquivo
-- `FileManagerService`: Gerencia apenas operações com arquivos
-- `FileGridWidget`: Exibe apenas a lista de cards
-- `DashedBorderPainter`: Desenha apenas bordas picotadas
+- Cada módulo tem uma responsabilidade específica
+- Separação clara entre UI, lógica de negócio e serviços
 
 #### Open/Closed Principle (OCP)
 
-- Interface `IFileManagerService` permite extensão sem modificação
-- Widgets podem ser estendidos sem alterar código existente
+- Módulos extensíveis sem modificação do código existente
+- Interfaces bem definidas para futuras implementações
+
+#### Liskov Substitution Principle (LSP)
+
+- Componentes substituíveis sem afetar o funcionamento
+- Hierarquia de classes bem estruturada
+
+#### Interface Segregation Principle (ISP)
+
+- Interfaces específicas para cada funcionalidade
+- Dependências mínimas e bem definidas
 
 #### Dependency Inversion Principle (DIP)
 
-- `FileGridWidget` depende da abstração `IFileManagerService`
-- Não há dependência direta de implementações concretas
+- Dependência de abstrações, não de implementações
+- Inversão de controle bem implementada
 
-### Estrutura de Arquivos
+### Estrutura de Módulos
 
 ```
-lib/modules/copy/
-├── copy_display.dart           # Widget principal
-├── models/
-│   └── dropped_file.dart       # Modelo de dados (SRP)
-├── services/
-│   └── file_manager_service.dart # Gerenciamento de arquivos (SRP)
-└── widgets/
-    ├── file_grid_widget.dart   # Grid de cards (SRP)
-    └── dashed_border_painter.dart # Bordas customizadas (SRP)
+lib/modules/
+├── dynamic/          # Comportamento dinâmico do Island
+├── static_monitor/   # Monitor de sistema (CPU/RAM)
+├── copy/            # Bandeja de arquivos e clipboard
+├── camera/          # Funcionalidade de espelho/câmera
+├── playing/         # Player de música (Spotify)
+├── cmd/             # Comandos e utilitários
+└── home/            # Tela principal e navegação
 ```
 
-## Como Usar
+## 🛠️ Tecnologias Utilizadas
 
-### 1. Adicionar Arquivos
+- **Flutter** `^3.6.0` - Framework principal
+- **Dart** - Linguagem de programação
+- **window_manager** `^0.4.3` - Gerenciamento de janela
+- **desktop_drop** `^0.4.4` - Funcionalidade drag & drop
+- **super_clipboard** `^0.8.24` - Operações avançadas de clipboard
+- **camera_macos** `^0.0.9` - Acesso à câmera no macOS
+- **http** `^1.2.0` - Requisições de rede
 
-- Arraste arquivos do Finder para a área de drop
-- Ou arraste para a área mesmo quando já há arquivos
+## 📋 Pré-requisitos
 
-### 2. Copiar Arquivos
+- **macOS** (otimizado para macOS)
+- **Flutter** 3.6.0 ou superior
+- **Dart SDK** 3.6.0 ou superior
+- **Spotify** instalado (para funcionalidade de música)
 
-- **Método 1 (Caminho)**: Toque no card do arquivo → copia o caminho
-- **Método 2 (Arquivo Real)**: Mantenha pressionado o card → copia o arquivo
+## 🚀 Instalação e Execução
 
-### 3. Usar Arquivos Copiados
+### 1. Clone o repositório
 
-- **Caminho copiado**: Cole em terminal, editor de texto, etc.
-- **Arquivo copiado**: Use Cmd+V para colar o arquivo em qualquer pasta do Finder
-
-### 4. Gerenciar Lista
-
-- Clique no X vermelho para remover um arquivo
-- Clique em "Limpar tudo" para remover todos
-
-## Dependências
-
-```yaml
-dependencies:
-  desktop_drop: ^0.4.4 # Drag & drop nativo
-  path: ^1.9.0 # Manipulação de caminhos
+```bash
+git clone https://github.com/seu-usuario/island.git
+cd island
 ```
 
-## Limitações Conhecidas
+### 2. Instale as dependências
 
-1. **Drag-out nativo**: Não é possível arrastar cards diretamente para aplicações externas devido a limitações do `desktop_drop`
-2. **Solução alternativa**: Use a funcionalidade de cópia (toque ou drag) e cole onde necessário
-3. **Plataforma**: Atualmente otimizado para macOS
+```bash
+flutter pub get
+```
 
-## Melhorias Futuras
+### 3. Execute o aplicativo
 
-- [ ] Suporte para Windows e Linux
-- [ ] Drag-out nativo quando bibliotecas permitirem
-- [ ] Preview de imagens nos cards
-- [ ] Filtros por tipo de arquivo
-- [ ] Histórico de arquivos
+```bash
+flutter run -d macos
+```
 
-## Tecnologias
+## 🎯 Como Usar
 
-- **Flutter**: Framework principal
-- **Dart**: Linguagem de programação
-- **desktop_drop**: Plugin para drag & drop
-- **Princípios SOLID**: Arquitetura limpa e mantível
+### Inicialização
 
-# island
+1. Execute o aplicativo
+2. O Island aparecerá como uma pequena ilha na parte superior da tela
+3. Clique para expandir e acessar todas as funcionalidades
+
+### Navegação entre Módulos
+
+- **Clique simples**: Expande/contrai o Island
+- **Navegação lateral**: Use as setas ou gestos para alternar entre módulos
+- **Estado persistente**: O Island lembra seu último estado
+
+### Funcionalidades Específicas
+
+#### 📊 Monitor de Sistema
+
+- Visualize automaticamente o uso de CPU e memória
+- Dados atualizados em tempo real
+
+#### 📋 Bandeja de Arquivos
+
+1. Arraste arquivos do Finder para o Island
+2. Toque para copiar o caminho
+3. Pressione e segure para copiar o arquivo
+4. Use os botões para gerenciar a lista
+
+#### 🎵 Spotify Player
+
+1. Tenha o Spotify rodando
+2. Use os controles do Island para navegar nas músicas
+3. Controle play/pause diretamente
+
+## 🔮 Roadmap
+
+### Versão Atual (1.0.0)
+
+- ✅ Todos os 5 módulos principais implementados
+- ✅ Interface Dynamic Island
+- ✅ Integração com Spotify
+
+### Próximas Versões
+
+- [ ] Suporte para Apple Music
+- [ ] Personalização de temas
+- [ ] Configurações avançadas
+- [ ] Suporte para múltiplos monitores
+- [ ] Atalhos de teclado customizáveis
+- [ ] Widget de clima
+- [ ] Notificações integradas
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Para contribuir:
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+### Diretrizes de Contribuição
+
+- Siga os princípios SOLID
+- Mantenha o código limpo e bem documentado
+- Adicione testes para novas funcionalidades
+- Respeite a arquitetura existente
+
+## 📝 Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+## 👨‍💻 Autor
+
+Desenvolvido com ❤️ para trazer a experiência do Dynamic Island para o MacBook.
+
+---
+
+**Island** - Transformando a produtividade no macOS, uma ilha de cada vez. 🏝️
