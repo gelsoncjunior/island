@@ -119,6 +119,7 @@ class _DynamicState extends State<Dynamic> with WindowListener {
                 spacing: 10,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  StaticMonitor(),
                   Flexible(
                     child: InkWell(
                       onTap: () {
