@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 
@@ -16,26 +17,28 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
   String _currentAlbum = '';
   String _currentPlayerState = 'stopped';
   Timer? _timer;
-  String _command(String command) {
-    final result = Process.runSync(
-      'osascript',
-      ['-e', command],
-      runInShell: true,
-    );
+  Future<String> _command(String command) async {
+    final result = await Isolate.run(() {
+      return Process.runSync(
+        'osascript',
+        ['-e', command],
+        runInShell: true,
+      );
+    });
     return result.stdout.toString().trim();
   }
 
-  void _getSpotifyPlayerState() {
-    final all =
-        _command('tell application "Spotify" to get player state as string');
+  Future<void> _getSpotifyPlayerState() async {
+    final all = await _command(
+        'tell application "Spotify" to get player state as string');
     setState(() {
       _currentPlayerState = all;
     });
   }
 
-  void _getSpotifyPlayerInfo() {
-    _getSpotifyPlayerState();
-    final all = _command(
+  Future<void> _getSpotifyPlayerInfo() async {
+    await _getSpotifyPlayerState();
+    final all = await _command(
         'tell application "Spotify" to get {name, artist, artwork url} of current track');
     final trackName = all.split(',')[0].replaceAll('"', '').trim();
     final trackArtist = all.split(',')[1].replaceAll('"', '').trim();
