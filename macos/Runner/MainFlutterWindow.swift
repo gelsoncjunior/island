@@ -57,7 +57,6 @@ class MainFlutterWindow: NSPanel {
         
         // Obter o frame da tela principal
         let screenFrame = screen.frame
-        let visibleFrame = screen.visibleFrame
         
         // Calcular a posição do notch (centro superior da tela)
         let notchWidth: CGFloat = 200 // Ajuste conforme seu design

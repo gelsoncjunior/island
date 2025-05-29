@@ -147,9 +147,10 @@ class _DynamicState extends State<Dynamic> with WindowListener {
             ),
             right: Container(
               width: 75,
-              color: Colors.black,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   StaticMonitor(),
                 ],
