@@ -169,8 +169,8 @@ class _DynamicState extends State<Dynamic> with WindowListener {
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
                 ),
               ),
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
