@@ -1,18 +1,42 @@
 import Foundation
 import Darwin
+import Darwin.Mach
 
 class SystemMonitor {
   
   // MARK: - CPU Usage
   
   static func getCpuUsage() -> Double {
-    // Implementação simplificada que sempre retorna um valor válido
-    // Em uma aplicação real, você pode usar outros métodos para obter o uso de CPU
+    // Implementação usando host_processor_info com tipos mais seguros
+    var cpuLoadInfo: host_cpu_load_info = host_cpu_load_info()
+    var count = mach_msg_type_number_t(MemoryLayout<host_cpu_load_info>.stride / MemoryLayout<integer_t>.stride)
     
-    // Simula um valor de CPU baseado na atividade do sistema
-    // Para um monitoramento real, seria necessário usar APIs mais complexas
-    let randomValue = Double.random(in: 0...100)
-    return min(max(randomValue, 0.0), 100.0)
+    let result = withUnsafeMutablePointer(to: &cpuLoadInfo) {
+      $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
+        host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, $0, &count)
+      }
+    }
+    
+    guard result == KERN_SUCCESS else {
+      print("Erro ao obter informações de CPU: \(result)")
+      return 0.0
+    }
+    
+    // Calcula o uso da CPU baseado nos ticks
+    let userTicks = Double(cpuLoadInfo.cpu_ticks.0)  // USER
+    let systemTicks = Double(cpuLoadInfo.cpu_ticks.1) // SYSTEM
+    let idleTicks = Double(cpuLoadInfo.cpu_ticks.2)   // IDLE
+    let niceTicks = Double(cpuLoadInfo.cpu_ticks.3)   // NICE
+    
+    let totalTicks = userTicks + systemTicks + idleTicks + niceTicks
+    
+    if totalTicks > 0 {
+      let activeTicks = userTicks + systemTicks + niceTicks
+      let cpuUsage = (activeTicks / totalTicks) * 100.0
+      return min(max(cpuUsage, 0.0), 100.0)
+    }
+    
+    return 0.0
   }
   
   // MARK: - Memory Usage
@@ -103,10 +127,11 @@ extension SystemMonitor {
   static func getCpuUsageWithRetry(maxRetries: Int = 3) -> Double {
     for attempt in 1...maxRetries {
       let usage = getCpuUsage()
-      if usage > 0 || attempt == maxRetries {
+      // Se obtivemos um valor válido (incluindo 0%), retornamos
+      if usage >= 0.0 || attempt == maxRetries {
         return usage
       }
-      // Pequena pausa entre tentativas
+      // Pequena pausa entre tentativas apenas se houver erro
       usleep(10000) // 10ms
     }
     return 0.0
