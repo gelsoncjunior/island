@@ -119,6 +119,7 @@ class SystemMonitor {
     formatter.countStyle = .memory
     return formatter.string(fromByteCount: Int64(bytes))
   }
+
 }
 
 // MARK: - Extensions for Better Error Handling

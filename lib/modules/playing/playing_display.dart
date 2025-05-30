@@ -21,9 +21,11 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
   Future<void> _getSpotifyPlayerState() async {
     final all = await command(
         'tell application "Spotify" to get player state as string');
-    setState(() {
-      _currentPlayerState = all;
-    });
+    if (mounted) {
+      setState(() {
+        _currentPlayerState = all;
+      });
+    }
   }
 
   Future<void> _getSpotifyPlayerInfo() async {
@@ -34,11 +36,13 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
       final trackName = all.split(',')[0].replaceAll('"', '').trim();
       final trackArtist = all.split(',')[1].replaceAll('"', '').trim();
       final artworkUrl = all.split(',')[2].replaceAll('"', '').trim();
-      setState(() {
-        _currentTrack = trackName;
-        _currentArtist = trackArtist;
-        _currentAlbum = artworkUrl;
-      });
+      if (mounted) {
+        setState(() {
+          _currentTrack = trackName;
+          _currentArtist = trackArtist;
+          _currentAlbum = artworkUrl;
+        });
+      }
     } catch (e) {
       debugPrint('Error getting Spotify player info: $e');
     }

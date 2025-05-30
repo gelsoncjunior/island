@@ -17,17 +17,15 @@ class _DiskSpaceMonitorState extends State<DiskSpaceMonitor> {
 
   void _getFreeSpace() async {
     try {
-      final double percentage =
-          await platform.invokeMethod('getDiskUsagePercentage');
+      final percentage = await platform.invokeMethod('getDiskUsagePercentage');
 
-      // Verifica se o widget ainda está montado antes de chamar setState
       if (mounted) {
         setState(() {
           _usedPercent = percentage.roundToDouble();
         });
       }
     } catch (e) {
-      print('Erro ao obter uso do disco: $e');
+      debugPrint('Erro ao obter uso do disco: $e');
     }
   }
 

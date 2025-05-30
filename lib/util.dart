@@ -48,7 +48,6 @@ class NeutralColorGenerator {
   ///   count: Número de cores a serem geradas (máximo: 16)
   ///
   /// Returns:
-  ///   List<Color>: Lista de cores neutras únicas
   ///
   /// Throws:
   ///   ArgumentError: Se count for menor que 1 ou maior que 16
@@ -70,7 +69,6 @@ class NeutralColorGenerator {
   /// Ideal para headers: D S T QQ SS
   ///
   /// Returns:
-  ///   List<Color>: Lista com 7 cores neutras para cada dia da semana
   static List<Color> getCalendarHeaderColors() {
     return [
       Color(0xFF2C3E50), // Domingo - Azul escuro elegante

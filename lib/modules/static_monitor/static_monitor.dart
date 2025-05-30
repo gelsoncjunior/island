@@ -12,10 +12,8 @@ class StaticMonitor extends StatefulWidget {
 class _StaticMonitorState extends State<StaticMonitor> {
   static const platform = MethodChannel('com.example.island');
 
-  double cpuUsage = 0.0;
-  double memoryUsage = 0.0;
-  double totalMemoryGB = 0.0;
-  double usedMemoryGB = 0.0;
+  String cpuUsage = '0.0';
+  String memoryUsage = '0.0';
   Timer? _timer;
 
   @override
@@ -42,22 +40,16 @@ class _StaticMonitorState extends State<StaticMonitor> {
 
   Future<void> _getSystemInfo() async {
     try {
-      // Chama o método nativo
-      final Map<dynamic, dynamic> result =
-          await platform.invokeMethod('getSystemInfo');
+      final result = await platform.invokeMethod('getSystemInfo');
 
       if (mounted) {
         setState(() {
-          cpuUsage = (result['cpu'] as num?)?.toDouble().roundToDouble() ?? 0.0;
-          memoryUsage =
-              (result['memoryUsage'] as num?)?.toDouble().roundToDouble() ??
-                  0.0;
-          totalMemoryGB = (result['totalMemory'] as num?)?.toDouble() ?? 0.0;
-          usedMemoryGB = (result['usedMemory'] as num?)?.toDouble() ?? 0.0;
+          cpuUsage = result['cpu'].toDouble().toStringAsFixed(2);
+          memoryUsage = result['memoryUsage'].toDouble().toStringAsFixed(2);
         });
       }
     } on PlatformException catch (e) {
-      print("Erro ao obter informações do sistema: '${e.message}'");
+      debugPrint("Erro ao obter informações do sistema: '${e.message}'");
       setState(() {});
     }
   }
@@ -75,7 +67,7 @@ class _StaticMonitorState extends State<StaticMonitor> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.computer_outlined, color: Colors.red[200], size: 12),
-            SizedBox(width: 4),
+            SizedBox(width: 2),
             Text(
               '$cpuUsage%',
               style: TextStyle(color: Colors.white, fontSize: 10),
@@ -89,7 +81,7 @@ class _StaticMonitorState extends State<StaticMonitor> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.memory_rounded, color: Colors.green[200], size: 12),
-            SizedBox(width: 4),
+            SizedBox(width: 2),
             Text(
               '$memoryUsage%',
               style: TextStyle(color: Colors.white, fontSize: 10),

@@ -21,7 +21,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<string>10.14</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
@@ -38,8 +38,12 @@
 	<true/>
 	<key>NSWindowIsResizable</key>
 	<false/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 	<key>NSAppleEventsUsageDescription</key>
-	<string>Esta aplicação precisa enviar eventos Apple para copiar arquivos para o clipboard</string>
+	<string>Este aplicativo precisa de permissões de Apple Events para monitorar eventos de teclado e copiar arquivos para o clipboard.</string>
+	<key>NSAccessibilityUsageDescription</key>
+	<string>Este aplicativo precisa de permissões de acessibilidade para detectar atalhos de teclado globais como Cmd+C.</string>
 	<key>com.apple.security.automation.apple-events</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -48,13 +52,5 @@
 	<string>Este app precisa acessar o microfone para gravar áudio</string>
 	<key>NSSystemAdministrationUsageDescription</key>
 	<string>Este app precisa acessar informações do sistema para monitorar CPU e memória.</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>Este app precisa acessar estatísticas do sistema.</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.14</string>
-	<key>NSHighResolutionCapable</key>
-	<true/>
-	<key>NSSupportsAutomaticGraphicsSwitching</key>
-	<true/>
 </dict>
 </plist>

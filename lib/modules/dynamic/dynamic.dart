@@ -4,6 +4,7 @@ import 'package:window_manager/window_manager.dart';
 
 import '../../constrains.dart';
 import '../copy/copy_display.dart';
+import '../copy_string/copy_string.dart';
 import '../disk_space/disk_space.dart';
 import '../home/home_display.dart';
 import '../static_monitor/static_monitor.dart';
@@ -124,6 +125,14 @@ class _DynamicState extends State<Dynamic> with WindowListener {
                       _isPinned = true;
                     });
                   }),
+                  CopyString(
+                    onTap: () {
+                      setState(() {
+                        _currentDisplay = 'CopyStringDisplayContent';
+                        _isPinned = true;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -189,7 +198,7 @@ class _DynamicState extends State<Dynamic> with WindowListener {
               ),
             ),
             right: Container(
-              width: 75,
+              width: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
@@ -214,6 +223,8 @@ class _DynamicState extends State<Dynamic> with WindowListener {
         return HomeDisplayContent();
       case 'CopyDisplayContent':
         return CopyDisplayContent();
+      case 'CopyStringDisplayContent':
+        return CopyStringDisplay();
       default:
         return SizedBox.shrink();
     }
