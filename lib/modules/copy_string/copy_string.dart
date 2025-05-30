@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:window_manager/window_manager.dart';
 
+import '../../constrains.dart';
 import '../copy/widgets/dashed_border_painter.dart';
 
 class CopyString extends StatefulWidget {
@@ -131,6 +133,18 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
     return text.substring(0, maxLength);
   }
 
+  /// Abre nova tela para exibir conteúdo completo
+  /// Princípio SRP: responsabilidade única de gerenciar navegação para nova tela
+  void _openContentWindow(String content) {
+    // Navega para nova tela otimizada para desktop
+    windowManager.setSize(Size(600, 600));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ContentViewerWindow(content: content),
+      ),
+    );
+  }
+
   void _setupKeyboardListener() {
     // Configurar listener para receber eventos do macOS
     platform.setMethodCallHandler((call) async {
@@ -214,20 +228,38 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
               scrollDirection: Axis.horizontal,
               itemCount: _copiedContent.length,
               itemBuilder: (_, i) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.edit_document, size: 28, color: Colors.white),
-                    Text(
-                      _limitStringLength(
-                          _copiedContent[i].trim(), _maxDisplayCharacters),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white, fontSize: 12),
+                return GestureDetector(
+                  onTap: () =>
+                      _openContentWindow(_copiedContent.reversed.toList()[i]),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white.withValues(alpha: 0.1),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        width: 1,
+                      ),
                     ),
-                  ],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.edit_document,
+                            size: 28, color: Colors.white),
+                        SizedBox(height: 4),
+                        Text(
+                          _limitStringLength(
+                              _copiedContent.reversed.toList()[i].trim(),
+                              _maxDisplayCharacters),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             ),
@@ -235,5 +267,132 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
         ),
       ),
     );
+  }
+}
+
+/// Widget para exibir conteúdo completo em nova tela
+/// Princípio SRP: responsabilidade única de exibir conteúdo detalhado
+class ContentViewerWindow extends StatefulWidget {
+  final String content;
+
+  const ContentViewerWindow({super.key, required this.content});
+
+  @override
+  State<ContentViewerWindow> createState() => _ContentViewerWindowState();
+}
+
+class _ContentViewerWindowState extends State<ContentViewerWindow> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        padding: EdgeInsets.all(19),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 40),
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.white70, size: 16),
+                  SizedBox(width: 8),
+                  Text(
+                    'Caracteres: ${widget.content.length}',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                  SizedBox(width: 16),
+                  Icon(Icons.text_fields, color: Colors.white70, size: 16),
+                  SizedBox(width: 8),
+                  Text(
+                    'Linhas: ${widget.content.split('\n').length}',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.copy, color: Colors.white, size: 16),
+                    onPressed: () => _copyToClipboard(),
+                    tooltip: 'Copiar novamente',
+                  ),
+                  SizedBox(width: 8),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.white, size: 20),
+                    onPressed: () {
+                      windowManager.setSize(Size(widthMax, heightMax));
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 5),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    width: 1,
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: SelectableText(
+                    widget.content,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      height: 1.5,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Copia o conteúdo para a área de transferência
+  /// Princípio SRP: responsabilidade única de copiar texto
+  Future<void> _copyToClipboard() async {
+    try {
+      await Clipboard.setData(ClipboardData(text: widget.content));
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('✅ Conteúdo copiado para área de transferência'),
+            backgroundColor: Colors.green.shade700,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ Erro ao copiar: $e'),
+            backgroundColor: Colors.red.shade700,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 }
