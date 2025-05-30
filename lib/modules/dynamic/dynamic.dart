@@ -100,7 +100,7 @@ class _DynamicState extends State<Dynamic> with WindowListener {
         ? _buildExpanded(
             left: Container(
               height: heightMin,
-              width: 120,
+              width: 190,
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.only(
@@ -129,25 +129,24 @@ class _DynamicState extends State<Dynamic> with WindowListener {
             ),
             center: Container(
               height: 100,
-              color: Colors.black,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(12),
+                  bottomLeft: Radius.circular(12),
+                ),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: _buildCenter(),
             ),
             right: Container(
               height: heightMin,
-              width: 120,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
-                ),
-              ),
+              width: 190,
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 spacing: 10,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  DiskSpaceMonitor(vertical: true),
                   StaticMonitor(),
                   Flexible(
                     child: InkWell(
@@ -192,7 +191,6 @@ class _DynamicState extends State<Dynamic> with WindowListener {
             right: Container(
               width: 75,
               decoration: BoxDecoration(
-                color: Colors.black,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
@@ -224,7 +222,6 @@ class _DynamicState extends State<Dynamic> with WindowListener {
   Widget _buildCollapsed({Widget? left, Widget? right}) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
       color: Colors.black,
       alignment: Alignment.center,
       width: _isHovered ? widthMax : widthMin,
@@ -232,7 +229,6 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       child: AnimatedOpacity(
         opacity: _isHovered ? 0 : 1,
         duration: Duration(milliseconds: 200),
-        curve: Curves.easeInOutBack,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -251,7 +247,7 @@ class _DynamicState extends State<Dynamic> with WindowListener {
   Widget _buildExpanded({Widget? left, Widget? center, Widget? right}) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
-      curve: Curves.easeInOutBack,
+      curve: Curves.bounceOut,
       color: Colors.black,
       alignment: Alignment.center,
       width: _isHovered ? widthMax : widthMin,

@@ -1,11 +1,10 @@
 import 'dart:async';
-
-import 'package:disk_space_2/disk_space_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class DiskSpaceMonitor extends StatefulWidget {
-  const DiskSpaceMonitor({super.key});
+  final bool vertical;
+  const DiskSpaceMonitor({super.key, this.vertical = false});
 
   @override
   State<DiskSpaceMonitor> createState() => _DiskSpaceMonitorState();
@@ -57,15 +56,28 @@ class _DiskSpaceMonitorState extends State<DiskSpaceMonitor> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.storage_rounded, color: Colors.green[200], size: 14),
-        SizedBox(width: 4),
-        Text(
-          '$_usedPercent%',
-          style: TextStyle(color: Colors.white, fontSize: 12),
-        ),
-      ],
-    );
+    return widget.vertical
+        ? Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.storage_rounded, color: Colors.green[200], size: 10),
+              SizedBox(width: 4),
+              Text(
+                '$_usedPercent%',
+                style: TextStyle(color: Colors.white, fontSize: 10),
+              ),
+            ],
+          )
+        : Row(
+            children: [
+              Icon(Icons.storage_rounded, color: Colors.green[200], size: 14),
+              SizedBox(width: 4),
+              Text(
+                '$_usedPercent%',
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ],
+          );
   }
 }
