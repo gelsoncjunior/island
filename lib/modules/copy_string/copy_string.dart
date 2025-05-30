@@ -76,7 +76,7 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
           _copiedContent.clear();
           _copiedContent.addAll(savedHistory);
         });
-      }
+      } else {}
     } catch (e) {
       debugPrint('❌ Erro ao carregar histórico: $e');
     }
@@ -95,7 +95,7 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
 
   /// Adiciona nova cópia ao histórico respeitando o limite FIFO
   /// Princípio SRP: responsabilidade única de gerenciar adição com limite
-  void _addCopyToHistory(String content) {
+  Future<void> _addCopyToHistory(String content) async {
     final trimmedContent = content.trim();
 
     // Evita duplicatas consecutivas
@@ -103,17 +103,23 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
       return;
     }
 
-    setState(() {
-      _copiedContent.add(trimmedContent);
+    // Atualiza a lista diretamente primeiro (funciona mesmo quando app não está em foco)
+    _copiedContent.add(trimmedContent);
 
-      // Remove itens mais antigos se ultrapassar o limite (FIFO)
-      while (_copiedContent.length > _maxHistoryItems) {
-        _copiedContent.removeAt(0);
-      }
-    });
+    // Remove itens mais antigos se ultrapassar o limite (FIFO)
+    while (_copiedContent.length > _maxHistoryItems) {
+      _copiedContent.removeAt(0);
+    }
 
-    // Salva automaticamente após adicionar
-    _saveCopyHistory();
+    // Salva primeiro para garantir persistência
+    await _saveCopyHistory();
+
+    // Atualiza UI apenas se o widget ainda estiver montado
+    if (mounted) {
+      setState(() {
+        // Lista já foi atualizada acima, apenas notifica a UI
+      });
+    }
   }
 
   /// Função helper para limitar string a um número máximo de caracteres
@@ -141,12 +147,9 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
   }
 
   Future<void> _handleCmdCEvent(dynamic arguments) async {
-    debugPrint('✅ Cmd+C detectado no Flutter!');
-    debugPrint('📋 Dados do input: $arguments');
-
     final content = arguments['content']?.toString() ?? '';
     if (content.isNotEmpty) {
-      _addCopyToHistory(content);
+      await _addCopyToHistory(content);
     }
   }
 
