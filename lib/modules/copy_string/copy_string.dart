@@ -293,7 +293,26 @@ class _ContentViewerWindowState extends State<ContentViewerWindow> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 40),
+            SizedBox(
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.white, size: 20),
+                    onPressed: () {
+                      windowManager.setSize(Size(widthMax, heightMax));
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.copy, color: Colors.white, size: 16),
+                    onPressed: () => _copyToClipboard(),
+                    tooltip: 'Copiar novamente',
+                  ),
+                ],
+              ),
+            ),
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -319,20 +338,6 @@ class _ContentViewerWindowState extends State<ContentViewerWindow> {
                     'Linhas: ${widget.content.split('\n').length}',
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
-                  Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.copy, color: Colors.white, size: 16),
-                    onPressed: () => _copyToClipboard(),
-                    tooltip: 'Copiar novamente',
-                  ),
-                  SizedBox(width: 8),
-                  IconButton(
-                    icon: Icon(Icons.close, color: Colors.white, size: 20),
-                    onPressed: () {
-                      windowManager.setSize(Size(widthMax, heightMax));
-                      Navigator.of(context).pop();
-                    },
-                  )
                 ],
               ),
             ),
