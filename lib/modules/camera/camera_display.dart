@@ -105,7 +105,7 @@ class _CameraDisplayState extends State<CameraDisplay> {
         children: [
           Icon(
             Icons.camera,
-            color: Colors.grey,
+            color: Colors.blue[200],
             size: widget.radius * 0.75,
           ),
           Text(

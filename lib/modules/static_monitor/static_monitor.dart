@@ -71,7 +71,7 @@ class _StaticMonitorState extends State<StaticMonitor> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.work_outline_rounded, color: Colors.white, size: 12),
+            Icon(Icons.computer_outlined, color: Colors.red[200], size: 12),
             SizedBox(width: 4),
             Text(
               '$cpuUsage%',
@@ -85,7 +85,7 @@ class _StaticMonitorState extends State<StaticMonitor> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.memory_rounded, color: Colors.white, size: 12),
+            Icon(Icons.memory_rounded, color: Colors.green[200], size: 12),
             SizedBox(width: 4),
             Text(
               '$memoryUsage%',

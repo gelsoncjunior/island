@@ -70,16 +70,14 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                border: _isDragging
-                    ? Border.all(color: Colors.grey, width: 2)
-                    : null,
               ),
               child: hasFiles
                   ? SizedBox(
                       width: double.infinity,
                       height: double.infinity,
                       child: DashedBorderContainer(
-                        borderColor: _isDragging ? Colors.grey : Colors.grey,
+                        borderColor:
+                            _isDragging ? Colors.greenAccent : Colors.grey,
                         dashLength: 6.0,
                         gapLength: 4.0,
                         borderRadius: BorderRadius.circular(8),
@@ -108,7 +106,7 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: DashedBorderContainer(
-        borderColor: _isDragging ? Colors.grey : Colors.grey,
+        borderColor: _isDragging ? Colors.greenAccent : Colors.grey,
         dashLength: 6.0,
         gapLength: 4.0,
         borderRadius: BorderRadius.circular(8),
@@ -129,7 +127,7 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
         children: [
           Icon(
             Icons.file_download,
-            color: Colors.grey,
+            color: Colors.greenAccent,
             size: 32,
           ),
           Text(
@@ -149,7 +147,7 @@ class _CopyDisplayContentState extends State<CopyDisplayContent> {
       children: [
         Icon(
           Icons.cloud_upload_outlined,
-          color: Colors.white54,
+          color: Colors.greenAccent,
           size: 32,
         ),
         const SizedBox(height: 8),
