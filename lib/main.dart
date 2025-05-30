@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:island/modules/dynamic/dynamic.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'constrains.dart';
+import 'modules/dynamic/dynamic.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

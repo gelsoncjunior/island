@@ -1,9 +1,9 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
-import 'package:island/modules/copy/copy_display.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../constrains.dart';
+import '../copy/copy_display.dart';
 import '../home/home_display.dart';
 import '../static_monitor/static_monitor.dart';
 
@@ -18,7 +18,6 @@ class _DynamicState extends State<Dynamic> with WindowListener {
   bool _isHovered = false;
   bool _isPinned = false;
   bool _showContent = false;
-  bool _isDragging = false;
   String _currentDisplay = 'HomeDisplayContent';
 
   void setSize(Size size) {
@@ -55,13 +54,11 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       body: DropTarget(
         onDragDone: (e) {
           setState(() {
-            _isDragging = false;
             _isPinned = false;
           });
         },
         onDragEntered: (e) {
           setState(() {
-            _isDragging = true;
             setSize(Size(widthMax, heightMax));
             setHovered(true);
             _currentDisplay = 'CopyDisplayContent';

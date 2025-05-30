@@ -27,17 +27,21 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
   }
 
   Future<void> _getSpotifyPlayerInfo() async {
-    await _getSpotifyPlayerState();
-    final all = await command(
-        'tell application "Spotify" to get {name, artist, artwork url} of current track');
-    final trackName = all.split(',')[0].replaceAll('"', '').trim();
-    final trackArtist = all.split(',')[1].replaceAll('"', '').trim();
-    final artworkUrl = all.split(',')[2].replaceAll('"', '').trim();
-    setState(() {
-      _currentTrack = trackName;
-      _currentArtist = trackArtist;
-      _currentAlbum = artworkUrl;
-    });
+    try {
+      await _getSpotifyPlayerState();
+      final all = await command(
+          'tell application "Spotify" to get {name, artist, artwork url} of current track');
+      final trackName = all.split(',')[0].replaceAll('"', '').trim();
+      final trackArtist = all.split(',')[1].replaceAll('"', '').trim();
+      final artworkUrl = all.split(',')[2].replaceAll('"', '').trim();
+      setState(() {
+        _currentTrack = trackName;
+        _currentArtist = trackArtist;
+        _currentAlbum = artworkUrl;
+      });
+    } catch (e) {
+      debugPrint('Error getting Spotify player info: $e');
+    }
   }
 
   void _nextTrack() {
@@ -83,7 +87,13 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
           color: Colors.grey[900]!,
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
-            image: NetworkImage(_currentAlbum),
+            onError: (_, __) {
+              setState(() {
+                _currentAlbum =
+                    'https://marketplace.canva.com/EAFvLSrAX9U/1/0/1600w/canva-music-desktop-wallpaper-qgZBY-Ll2Vc.jpg';
+              });
+            },
+            image: NetworkImage(_currentAlbum, scale: 1),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
                 Colors.black.withValues(alpha: 0.5), BlendMode.color),

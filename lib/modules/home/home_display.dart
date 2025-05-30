@@ -28,6 +28,7 @@ class HomeDisplayContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
+      spacing: 16,
       children: [
         PlayingDisplay(),
         const SizedBox(width: 16),
