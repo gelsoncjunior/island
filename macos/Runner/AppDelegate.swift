@@ -42,6 +42,8 @@ class AppDelegate: FlutterAppDelegate {
       getCpuUsage(result: result)
     case "getMemoryInfo":
       getMemoryInfo(result: result)
+    case "getDiskUsagePercentage":
+      getDiskUsagePercentage(result: result)
     default:
       result(FlutterMethodNotImplemented)
     }
@@ -71,5 +73,29 @@ class AppDelegate: FlutterAppDelegate {
   private func getMemoryInfo(result: @escaping FlutterResult) {
     let memoryInfo = SystemMonitor.getMemoryInfo()
     result(memoryInfo)
+  }
+
+  private func getDiskUsagePercentage(result: @escaping FlutterResult) {
+    do {
+      let fileManager = FileManager.default
+      let homeDirectory = URL(fileURLWithPath: NSHomeDirectory())
+      let attributes = try fileManager.attributesOfFileSystem(forPath: homeDirectory.path)
+      
+      guard let totalSize = attributes[.systemSize] as? NSNumber,
+            let freeSize = attributes[.systemFreeSize] as? NSNumber else {
+        result(0.0)
+        return
+      }
+
+      let totalSpace = totalSize.doubleValue
+      let freeSpace = freeSize.doubleValue
+      let usedSpace = totalSpace - freeSpace
+      let percentage = (usedSpace / totalSpace) * 100.0
+
+      result(percentage)
+    } catch {
+      print("Erro ao obter espaço do disco: \(error)")
+      result(0.0)
+    }
   }
 }

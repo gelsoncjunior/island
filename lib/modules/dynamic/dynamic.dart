@@ -4,6 +4,7 @@ import 'package:window_manager/window_manager.dart';
 
 import '../../constrains.dart';
 import '../copy/copy_display.dart';
+import '../disk_space/disk_space.dart';
 import '../home/home_display.dart';
 import '../static_monitor/static_monitor.dart';
 
@@ -179,6 +180,14 @@ class _DynamicState extends State<Dynamic> with WindowListener {
                 ),
               ),
               padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  DiskSpaceMonitor(),
+                ],
+              ),
             ),
             right: Container(
               width: 75,
@@ -223,7 +232,7 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       child: AnimatedOpacity(
         opacity: _isHovered ? 0 : 1,
         duration: Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
+        curve: Curves.easeInOutBack,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -241,8 +250,8 @@ class _DynamicState extends State<Dynamic> with WindowListener {
 
   Widget _buildExpanded({Widget? left, Widget? center, Widget? right}) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 400),
+      curve: Curves.easeInOutBack,
       color: Colors.black,
       alignment: Alignment.center,
       width: _isHovered ? widthMax : widthMin,

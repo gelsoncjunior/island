@@ -31,9 +31,7 @@ class HomeDisplayContent extends StatelessWidget {
       spacing: 16,
       children: [
         PlayingDisplay(),
-        const SizedBox(width: 16),
         const ModernCalendarWidget(),
-        const SizedBox(width: 16),
         CameraDisplay(),
       ],
     );

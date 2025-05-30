@@ -46,13 +46,16 @@ class _StaticMonitorState extends State<StaticMonitor> {
       final Map<dynamic, dynamic> result =
           await platform.invokeMethod('getSystemInfo');
 
-      setState(() {
-        cpuUsage = (result['cpu'] as num?)?.toDouble().roundToDouble() ?? 0.0;
-        memoryUsage =
-            (result['memoryUsage'] as num?)?.toDouble().roundToDouble() ?? 0.0;
-        totalMemoryGB = (result['totalMemory'] as num?)?.toDouble() ?? 0.0;
-        usedMemoryGB = (result['usedMemory'] as num?)?.toDouble() ?? 0.0;
-      });
+      if (mounted) {
+        setState(() {
+          cpuUsage = (result['cpu'] as num?)?.toDouble().roundToDouble() ?? 0.0;
+          memoryUsage =
+              (result['memoryUsage'] as num?)?.toDouble().roundToDouble() ??
+                  0.0;
+          totalMemoryGB = (result['totalMemory'] as num?)?.toDouble() ?? 0.0;
+          usedMemoryGB = (result['usedMemory'] as num?)?.toDouble() ?? 0.0;
+        });
+      }
     } on PlatformException catch (e) {
       print("Erro ao obter informações do sistema: '${e.message}'");
       setState(() {});

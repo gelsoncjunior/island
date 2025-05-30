@@ -42,6 +42,7 @@ dependencies:
   camera_macos: ^0.0.9
   http: ^1.2.0
   json_annotation: ^4.9.0
+  disk_space_2: ^1.0.9
   flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:

@@ -23,7 +23,7 @@ class CopyDisplay extends StatelessWidget {
         children: [
           Icon(
             Icons.inbox_rounded,
-            color: Colors.white,
+            color: Colors.greenAccent,
             size: 20,
           ),
           SizedBox(width: 5),
