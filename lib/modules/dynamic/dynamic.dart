@@ -1,3 +1,4 @@
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:island/modules/copy/copy_display.dart';
 import 'package:window_manager/window_manager.dart';
@@ -17,6 +18,7 @@ class _DynamicState extends State<Dynamic> with WindowListener {
   bool _isHovered = false;
   bool _isPinned = false;
   bool _showContent = false;
+  bool _isDragging = false;
   String _currentDisplay = 'HomeDisplayContent';
 
   void setSize(Size size) {
@@ -50,29 +52,46 @@ class _DynamicState extends State<Dynamic> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MouseRegion(
-        onHover: (e) {
+      body: DropTarget(
+        onDragDone: (e) {
           setState(() {
-            if (e.localPosition.dy < 50) {
-              setSize(Size(widthMax, heightMax));
-              setHovered(true);
-            }
+            _isDragging = false;
+            _isPinned = false;
           });
         },
-        onExit: (event) {
+        onDragEntered: (e) {
           setState(() {
-            if (!_isPinned) {
-              setHovered(false);
-              setShowContent(false);
-              Future.delayed(Duration(milliseconds: 100), () {
-                setSize(Size(widthMin, heightMin));
-              });
-            }
+            _isDragging = true;
+            setSize(Size(widthMax, heightMax));
+            setHovered(true);
+            _currentDisplay = 'CopyDisplayContent';
+            _isPinned = true;
           });
         },
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: _buildWindows(_isHovered),
+        child: MouseRegion(
+          onHover: (e) {
+            setState(() {
+              if (e.localPosition.dy < 50) {
+                setSize(Size(widthMax, heightMax));
+                setHovered(true);
+              }
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              if (!_isPinned) {
+                setHovered(false);
+                setShowContent(false);
+                Future.delayed(Duration(milliseconds: 100), () {
+                  setSize(Size(widthMin, heightMin));
+                });
+              }
+            });
+          },
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: _buildWindows(_isHovered),
+          ),
         ),
       ),
     );
