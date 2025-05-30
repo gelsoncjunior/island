@@ -229,6 +229,18 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
               itemCount: _copiedContent.length,
               itemBuilder: (_, i) {
                 return GestureDetector(
+                  onLongPress: () async {
+                    await Clipboard.setData(ClipboardData(
+                        text: _copiedContent.reversed.toList()[i]));
+
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(
+                                '✅ Conteúdo copiado para área de transferência')),
+                      );
+                    }
+                  },
                   onTap: () =>
                       _openContentWindow(_copiedContent.reversed.toList()[i]),
                   child: Container(
