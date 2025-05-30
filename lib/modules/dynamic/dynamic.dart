@@ -56,7 +56,9 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       body: DropTarget(
         onDragDone: (e) {
           setState(() {
-            _isPinned = false;
+            if (_currentDisplay != 'CopyDisplayContent') {
+              _isPinned = false;
+            }
           });
         },
         onDragEntered: (e) {

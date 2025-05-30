@@ -239,7 +239,7 @@ class _FileCardWidgetState extends State<_FileCardWidget> {
                     width: 16,
                     height: 16,
                     decoration: BoxDecoration(
-                      color: Colors.green.withValues(alpha: 0.8),
+                      color: Colors.red.withValues(alpha: 0.8),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
