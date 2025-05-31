@@ -226,7 +226,13 @@ class _DynamicState extends State<Dynamic> with WindowListener {
       case 'CopyDisplayContent':
         return CopyDisplayContent();
       case 'CopyStringDisplayContent':
-        return CopyStringDisplay();
+        return CopyStringDisplay(
+          onTap: () {
+            setState(() {
+              _isPinned = true;
+            });
+          },
+        );
       default:
         return SizedBox.shrink();
     }

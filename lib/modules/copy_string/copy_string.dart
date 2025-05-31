@@ -41,7 +41,8 @@ class _CopyStringState extends State<CopyString> {
 }
 
 class CopyStringDisplay extends StatefulWidget {
-  const CopyStringDisplay({super.key});
+  final VoidCallback? onTap;
+  const CopyStringDisplay({super.key, this.onTap});
 
   @override
   State<CopyStringDisplay> createState() => _CopyStringDisplayState();
@@ -241,8 +242,10 @@ class _CopyStringDisplayState extends State<CopyStringDisplay> {
                       );
                     }
                   },
-                  onTap: () =>
-                      _openContentWindow(_copiedContent.reversed.toList()[i]),
+                  onTap: () {
+                    widget.onTap?.call();
+                    _openContentWindow(_copiedContent.reversed.toList()[i]);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
