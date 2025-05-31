@@ -89,7 +89,7 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.grey[900]!,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
             onError: (_, __) {
               setState(() {
@@ -105,7 +105,14 @@ class _PlayingDisplayState extends State<PlayingDisplay> {
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.7),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.black.withValues(alpha: 0.8),
+                Colors.black.withValues(alpha: 0.5),
+              ],
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.only(left: 6.0, right: 6.0, top: 6.0),
